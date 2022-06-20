@@ -17,7 +17,11 @@ namespace Less2
         static void Main(string[] args)
         {
 
-            //GetMethodsGroupedByName(typeof(MyClass));
+            // Viewer 
+
+            Viewer viewer1 = Viewer.Singletone();
+            
+            
             while (true)
             {
                 ConsoleKey key;
@@ -64,6 +68,7 @@ namespace Less2
             while (true)
             {
                 Console.Clear();
+
                 Console.WriteLine("Информация по типам");
                 Console.WriteLine("Выберите тип:");
                 Console.WriteLine("----------------------------------------");
@@ -139,6 +144,7 @@ namespace Less2
         {
             ConsoleKey key;
             Console.Clear();
+            //TODO убрать методы енамТитл и сделать стринг.Join
             Console.WriteLine("Информация по типу: " + type.Name);
             Console.WriteLine("Значимый тип: " + type.IsValueType);
             Console.WriteLine("Пространство имен: " + type.Namespace);
@@ -321,77 +327,65 @@ namespace Less2
         private static void ShowAllTypeInfo()
         {
             Console.Clear();
-
-            Assembly[] refAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             
+            // Создаем 
+            Assembly[] refAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             List<Type> types = new();
 
             foreach (Assembly asm in refAssemblies)
                 types.AddRange(asm.GetTypes());
 
             List<string> numberNamespace = new ();
+            InfoOfAssembly infoAssembly = new ();
 
-            int countValueType = 0, // Количество значимых типов
-                countInterface = 0, //Количество интерфейсов
-                maxLenghtNameOfMethod = 0, // Макс длина имени метода
-                maxNumberMethodsOfType = 0, // Тип с макс числом методов
-                maxCountArgumentsInMethod = 0; // Макс число параметров в методе
-            string nameType = "", // Тип с макс числом методов
-                   nameMethodMaxParam = "", // Метод с макс числом параметров
-                   maxLenghtName = " "; // Метод с макс длиной имени
-
+            string temp;
+            int countParams;
             foreach (var type in types)
             {
                 if (!numberNamespace.Contains(type.Namespace))
                 {
                     if (type.IsValueType)
-                    {
-                        countValueType++;
-                    }
+                        infoAssembly.countValueType++;
                     else if (type.IsInterface)
-                    {
-                        countInterface++;
-                    }
+                        infoAssembly.countInterface++;
 
                     var methods = type.GetMethods();
-                    if (methods.Length > maxNumberMethodsOfType)
+                    if (methods.Length > infoAssembly.maxNumberMethodsOfType)
                     {
-                        maxNumberMethodsOfType = methods.Length;
-                        nameType = type.Name;
+                        infoAssembly.maxNumberMethodsOfType = methods.Length;
+                        infoAssembly.nameType = type.Name;
                     }
-                    string temp;
-                    int countParams;
+                    
                     foreach (var method in methods)
                     {
                         temp = method.Name;
                         countParams = method.GetParameters().Length;
-                        if (countParams > maxCountArgumentsInMethod)
+                        if (countParams > infoAssembly.maxCountArgumentsInMethod)
                         {
-                            maxCountArgumentsInMethod = countParams;
-                            nameMethodMaxParam = temp;
+                            infoAssembly.maxCountArgumentsInMethod = countParams;
+                            infoAssembly.nameMethodMaxParam = temp;
                         }
-                        if (temp.Length > maxLenghtNameOfMethod)
+                        if (temp.Length > infoAssembly.maxLenghtNameOfMethod)
                         {
-                            maxLenghtNameOfMethod = temp.Length;
-                            maxLenghtName = temp;
+                            infoAssembly.maxLenghtNameOfMethod = temp.Length;
+                            infoAssembly.maxLenghtName = temp;
                         }
-                        
                     }
-
                     numberNamespace.Add(type.Namespace);
                 }
             }
 
             ConsoleKey key;
+            // весь текст загнать 
             Console.WriteLine("Общая информация по типам:{0, 55}", "шт.");
             Console.WriteLine("Подключенные сборки: {0, 55}",refAssemblies.Length);
             Console.WriteLine("Всего типов по всем подключенным сборкам: " + numberNamespace.Count);
-            Console.WriteLine("Ссылочные типы: " + (numberNamespace.Count - countValueType));
-            Console.WriteLine("Значимые типы: " + countValueType);
-            Console.WriteLine("Типы интерфейсы - " + countInterface);
-            Console.WriteLine("Тип с максимальным числом методов:" + maxNumberMethodsOfType + " " + nameType);
-            Console.WriteLine("Самое длинное название метода:" + maxLenghtNameOfMethod + " " + maxLenghtName);
-            Console.WriteLine("Метод с наибольшим числом аргументов:" + maxCountArgumentsInMethod + " " + nameMethodMaxParam);
+            Console.WriteLine("Ссылочные типы: " + (numberNamespace.Count - infoAssembly.countValueType));
+            Console.WriteLine("Значимые типы: " + infoAssembly.countValueType);
+            Console.WriteLine("Типы интерфейсы - " + infoAssembly.countInterface);
+            Console.WriteLine("Тип с максимальным числом методов:" + infoAssembly.maxNumberMethodsOfType + " " + infoAssembly.nameType);
+            Console.WriteLine("Самое длинное название метода:" + infoAssembly.maxLenghtNameOfMethod + " " + infoAssembly.maxLenghtName);
+            Console.WriteLine("Метод с наибольшим числом аргументов:" + infoAssembly.maxCountArgumentsInMethod + " " + infoAssembly.nameMethodMaxParam);
             Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в главное меню");
             Console.WriteLine("Нажмите любую клавишу, чтобы вернуться в главное меню".Length);
             key = Console.ReadKey(true).Key;
@@ -464,19 +458,6 @@ namespace Less2
             }
         }
         /// <summary>
-        /// Установка цвета текста консоли
-        /// </summary>
-        /// <param name="color">Цвет текста.</param>
-        private static void SetColorTextConsole(ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            if (Console.ForegroundColor == Console.BackgroundColor)
-            {
-                Console.BackgroundColor -= 1;
-            }
-            Console.Clear();
-        }
-        /// <summary>
         /// Изменение цвета фона консоли
         /// </summary>
         private static void ChangeBackgroundColor()
@@ -513,9 +494,30 @@ namespace Less2
             }
         }
         /// <summary>
+        /// Установка цвета текста в консоли
+        /// </summary>
+        /// <param name="color"></param>
+        /// <summary>
+        /// Установка цвета текста консоли
+        /// </summary>
+        /// <param name="color">Цвет текста.</param>
+        private static void SetColorTextConsole(ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            if (Console.ForegroundColor == Console.BackgroundColor)
+            {
+                Console.BackgroundColor -= 1;
+            }
+            Console.Clear();
+        }
+        /// <summary>
         /// Установка цвета фона консоли
         /// </summary>
         /// <param name="color"></param>
+        /// <summary>
+        /// Установка цвета текста консоли
+        /// </summary>
+        /// <param name="color">Цвет текста.</param>
         private static void SetBackgroundColor(ConsoleColor color)
         {
             Console.BackgroundColor = color;
