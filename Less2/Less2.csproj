@@ -45,9 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InfoOfAssembly.cs" />
-    <Compile Include="Viewer.cs" />
+    <Compile Include="MethodComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolverForTask1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

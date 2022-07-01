@@ -12,9 +12,21 @@ namespace Less2
     public struct InfoOfAssembly
     {
         /// <summary>
+        /// Количество подключенных сборок.
+        /// </summary>
+        public int countConnectingAssemblies;
+        /// <summary>
+        /// Число уникальных типов в текущей сборке.
+        /// </summary>
+        public int countUniqueTepesInCurrentAssembly;
+        /// <summary>
         /// Количество значимых типов
         /// </summary>
         public int countValueType;
+        /// <summary>
+        /// Количество ссылочных типов
+        /// </summary>
+        public int countRefTypes;
         /// <summary>
         /// Количество интерфейсов
         /// </summary>
@@ -43,8 +55,11 @@ namespace Less2
         /// Метод с макс длиной имени
         /// </summary>
         public string maxLenghtName;
-        public InfoOfAssembly(int defaultIntValue = -1, string defaultStringValue = "")
+        public InfoOfAssembly(int defaultIntValue = 0, string defaultStringValue = "")
         {
+            countConnectingAssemblies = defaultIntValue;
+            countUniqueTepesInCurrentAssembly = defaultIntValue;
+            countRefTypes = defaultIntValue;
             countValueType = defaultIntValue;
             countInterface = defaultIntValue;
             maxLenghtNameOfMethod = defaultIntValue;
@@ -53,6 +68,16 @@ namespace Less2
             nameType = defaultStringValue;
             nameMethodMaxParam = defaultStringValue;
             maxLenghtName = defaultStringValue;
+        }
+    }
+
+    public class Datas
+    {
+        public string Name { get; set; }
+        public DataMethods DataMethod { get; set; }
+        public override string ToString()
+        {
+            return Name; 
         }
     }
 }
