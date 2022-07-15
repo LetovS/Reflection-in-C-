@@ -29,7 +29,7 @@ namespace Less2
             // Get params
             foreach (var type in types)
             {
-                if (!uniqueNamesTypes.Contains(type.Namespace))
+                if (!uniqueNamesTypes.Contains(type.FullName))
                 {
                     // Считаем число ссылочных, значимых типов и число интерфейсов.
                     infoAssembly = GetCountRefAndValueTypesInAssembly(infoAssembly, type);
