@@ -13,16 +13,6 @@ namespace Less2
     {
         static void Main(string[] args)
         {
-            //MethodComparer methodComparer = new MethodComparer() { Field = MethodComparer.CompareField.byLenghtOfNameMethod };
-            //List<MethodInfo> methods = typeof(int).GetMethods().ToList();
-            //methods.Sort(methodComparer);
-            //Console.WriteLine();
-            //Console.WriteLine("{0} {1,20} {2,20}", "Name", "Number param", "Lenth name");
-            //foreach (var item in methods)
-            //{
-            //    Console.WriteLine("{0} {1,20} {2,20}", item.Name, item.GetParameters().Length, item.Name.Length);
-            //}
-
             while (true)
             {
                 Console.Clear();
