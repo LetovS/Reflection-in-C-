@@ -29,22 +29,6 @@ namespace Less2
         }
         public CompareField Field { get; set; }
         
-
-        public int Compare(DataMethods x, DataMethods y)
-        {
-            switch (Field)
-            {
-                case CompareField.byNameMethod:
-                    return x.NumberOverloadsMethod.CompareTo(y.NumberOverloadsMethod);
-                case CompareField.byLenghtOfNameMethod:
-                    return x.MinCountParam.CompareTo(y.MinCountParam);
-                case CompareField.byCountArguments:
-                    return x.MaxCountParam.CompareTo(y.MaxCountParam); ;
-                default:
-                    return 0;
-            }
-        }
-
         public int Compare(Datas x, Datas y)
         {
             switch (Field)

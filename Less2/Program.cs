@@ -13,16 +13,6 @@ namespace Less2
     {
         static void Main(string[] args)
         {
-            //MethodComparer methodComparer = new MethodComparer() { Field = MethodComparer.CompareField.byLenghtOfNameMethod };
-            //List<MethodInfo> methods = typeof(int).GetMethods().ToList();
-            //methods.Sort(methodComparer);
-            //Console.WriteLine();
-            //Console.WriteLine("{0} {1,20} {2,20}", "Name", "Number param", "Lenth name");
-            //foreach (var item in methods)
-            //{
-            //    Console.WriteLine("{0} {1,20} {2,20}", item.Name, item.GetParameters().Length, item.Name.Length);
-            //}
-
             while (true)
             {
                 Console.Clear();
@@ -95,6 +85,7 @@ namespace Less2
                 Console.WriteLine("7 - string");
                 Console.WriteLine("8 – Vector");
                 Console.WriteLine("9 – Matrix");
+                Console.WriteLine("T - введите тип.");
                 Console.WriteLine("0 – Выход в главное меню");
                 
                 switch (Console.ReadKey(true).Key)
@@ -141,6 +132,21 @@ namespace Less2
                         //type = typeof(string);
                         //ShowInfoAboutChooseType(type);
                         break;
+                    case ConsoleKey.T:
+                        Console.Clear();
+                        Console.Write("Введите полное название типа: [System.Int32]: ");
+                        string name = Console.ReadLine();
+                        if (SolverForTask1.CheckType(name, out type))
+                        {
+                            ShowInfoAboutChooseType(type);
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Введенный вами тип не найден.");
+                            Console.ReadKey(true);
+                        }
+                        break;
                     case ConsoleKey.D0:
                         Console.Clear();
                         return;
@@ -162,6 +168,7 @@ namespace Less2
                 Console.WriteLine("Изменение настроек консоли.");
                 Console.WriteLine("1 – Изменение фона консоли.");
                 Console.WriteLine("2 – Изменение цвета текста в консоли");
+                Console.WriteLine("3 – Вывод всех доступных цветов для консоли.");
                 Console.WriteLine("0 - Выход в главное меню");
                 switch (Console.ReadKey(true).Key)
                 {
@@ -169,6 +176,12 @@ namespace Less2
                         ChangeBackgroundColor();
                         break;
                     case ConsoleKey.D2:
+                        ChangeColorTextConsole();
+                        break;
+                    case ConsoleKey.D3:
+                        ShowAllConsoleColors();
+                        break;
+                    case ConsoleKey.D4:
                         ChangeColorTextConsole();
                         break;
                     case ConsoleKey.D0:
@@ -180,7 +193,22 @@ namespace Less2
                 }
             }
         }
-
+        /// <summary>
+        /// Вывод всех доступных цветов для консоли.
+        /// </summary>
+        private static void ShowAllConsoleColors()
+        {
+            Console.Clear();
+            var t = typeof(ConsoleColor).GetEnumNames();
+            Console.WriteLine("Доступные цвета: ");
+            int number = 1;
+            foreach (var item in t)
+            {
+                Console.WriteLine(number + ") " + item);
+                number++;
+            }
+            Console.ReadKey(true);
+        }
         /// <summary>
         /// Сводный данные о выбранном типе.
         /// </summary>
@@ -206,9 +234,9 @@ namespace Less2
                     Console.Clear();
                     while (true)
                     {
-
                         Dictionary<string, DataMethods>  groupedMethods = SolverForTask1.GetMethodsGroupedByName(type, out int maxLenthMethodsName);
-                        List<Datas> data = new();
+                        // структура для сортировки
+                        List<Datas> data = new List<Datas>();
                         Console.WriteLine($"Выбирите способ сортировки информации о методах типа {type.Name}");
                         Console.WriteLine("1 – по Имени.");
                         Console.WriteLine("2 – по длине имени");
@@ -230,11 +258,9 @@ namespace Less2
                                 return;
                             default:
                                 ErrorMsg();
-                                break;
+                                return;
                         }
-                        //тут получить сгруппированную структуру по какому то критерию SortedParam { ...}
-
-
+                        
                         //вывод на консоль сгруппированных методов
                         ShowGroupedMethods(type.Name, data, maxLenthMethodsName);
                         Console.ReadKey(true);
@@ -249,8 +275,6 @@ namespace Less2
                     break;
             }
         }
-        
-
         /// <summary>
         /// Вывод на консоль сгруппированные методы
         /// </summary>
@@ -306,7 +330,6 @@ namespace Less2
                 }
             }
         }
-
         /// <summary>
         /// Не корректный выбор
         /// </summary>
@@ -317,7 +340,6 @@ namespace Less2
             Console.ReadLine();
             Console.Clear();
         }
-
         #region Оформление консоли
         
         /// <summary>
@@ -331,6 +353,7 @@ namespace Less2
             Console.WriteLine("2 – Желтый");
             Console.WriteLine("3 – Серый");
             Console.WriteLine("4 – Черный");
+            Console.WriteLine("5 – Указать свой цвет.");
             Console.WriteLine("0 - Возврат в предыдущее меню");
             switch (Console.ReadKey(true).Key)
             {
@@ -345,6 +368,20 @@ namespace Less2
                     break;
                 case ConsoleKey.D4:
                     SetColorTextConsole(ConsoleColor.Black);
+                    break;
+                case ConsoleKey.D5:
+                    ConsoleColor userColor = CheckInputColor();
+                    if ((int)userColor != -1)
+                    {
+                        SetColorTextConsole(userColor);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Цвет не найден.");
+                        Console.ReadKey(true);
+                    }
+                        
                     break;
                 case ConsoleKey.D0:
                     Console.Clear();
@@ -365,6 +402,7 @@ namespace Less2
             Console.WriteLine("2 – Желтый");
             Console.WriteLine("3 – Серый");
             Console.WriteLine("4 – Черный");
+            Console.WriteLine("5 – Указать свой цвет.");
             Console.WriteLine("0 - Возврат в предыдущее меню");
             switch (Console.ReadKey(true).Key)
             {
@@ -380,6 +418,19 @@ namespace Less2
                 case ConsoleKey.D4:
                     SetBackgroundColor(ConsoleColor.Black);
                     break;
+                case ConsoleKey.D5:
+                    ConsoleColor userColor = CheckInputColor();
+                    if ((int)userColor != -1)
+                    {
+                        SetBackgroundColor(userColor);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Цвет не найден.");
+                        Console.ReadKey(true);
+                    }
+                    break;
                 case ConsoleKey.D0:
                     Console.Clear();
                     return;
@@ -388,6 +439,18 @@ namespace Less2
                     break;
             }
         }
+
+        private static ConsoleColor CheckInputColor()
+        {
+            Console.Clear();
+            Console.Write("Укажите цвет: ");
+            string colorName = Console.ReadLine();
+            var t = typeof(ConsoleColor).GetEnumNames();
+            int indexColor = Array.FindIndex(t, x => x == colorName);
+            
+            return (ConsoleColor)indexColor;
+        }
+
         /// <summary>
         /// Установка цвета текста в консоли
         /// </summary>
