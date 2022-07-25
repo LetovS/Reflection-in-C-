@@ -70,7 +70,7 @@ namespace Less2
             maxLenghtName = defaultStringValue;
         }
     }
-
+    
     public class Datas
     {
         public string Name { get; set; }

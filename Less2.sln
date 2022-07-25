@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Less2", "Less2\Less2.csproj", "{B9F09268-897A-4F01-A63B-92CFBA7C0282}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1Reflection", "Less2\Task1Reflection.csproj", "{B9F09268-897A-4F01-A63B-92CFBA7C0282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

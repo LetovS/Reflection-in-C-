@@ -10,6 +10,28 @@ namespace Less2
 {
     public static class SolverForTask1
     {
+        
+        public static bool CheckType(string typeName, out Type type)
+        {
+            Dictionary<string, Type>  dbTypes = new Dictionary<string, Type>();
+            Assembly[] refAssemblies1 = AppDomain.CurrentDomain.GetAssemblies();
+            List<Type> types = GetListTypesInAssembly(refAssemblies1);
+            foreach (var typer in types)
+            {
+                if (!dbTypes.ContainsKey(typer.FullName))
+                    dbTypes.Add(typer.FullName, typer);
+            }
+            if (dbTypes.ContainsKey(typeName))
+            {
+                type = dbTypes[typeName];
+                return true;
+            }
+            type = null;
+            return false;
+        }
+        
+        
+
         // methods get all info about Assembly
         /// <summary>
         /// Получение сведений о сборке.
@@ -31,6 +53,7 @@ namespace Less2
             {
                 if (!uniqueNamesTypes.Contains(type.FullName))
                 {
+                    
                     // Считаем число ссылочных, значимых типов и число интерфейсов.
                     infoAssembly = GetCountRefAndValueTypesInAssembly(infoAssembly, type);
 
@@ -137,9 +160,7 @@ namespace Less2
             foreach (Assembly asm in refAssemblies)
                 types.AddRange(asm.GetTypes());
             return types;
-        }
-
-
+        } 
         public static  string GetListNamesOfType(Type type, NamesForType targetNames)
         {
             switch (targetNames)
@@ -272,8 +293,17 @@ namespace Less2
     /// </summary>
     public enum NamesForType
     {
+        /// <summary>
+        ///  Имена для полей
+        /// </summary>
         NamesFields = 1,
+        /// <summary>
+        /// Имена для свойств
+        /// </summary>
         NamesProperty,
+        /// <summary>
+        /// Имена для методов
+        /// </summary>
         NamesMethods
     }
 
